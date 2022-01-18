@@ -1,0 +1,14 @@
+{
+  "hosted-zone:account=537834727337:domainName=techkronik.com:privateZone=false:region=us-east-1": {
+    "Id": "/hostedzone/Z03143602FEO83FLHF4VO",
+    "Name": "techkronik.com."
+  },
+  "availability-zones:account=537834727337:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ]
+}
