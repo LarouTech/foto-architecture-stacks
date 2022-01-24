@@ -81,7 +81,7 @@ export function profileDynmodbStackBuilder(app: App, stage: STAGE) {
 }
 
 
-export function fotoApiGatewayStackBuilder(app: App, stage: STAGE, hostedZone: IHostedZone, getSecretValueCommand: IFunction, putItemDynamodb: IFunction, getItemDynamodb: IFunction, userPool: UserPool, userPoolClient: UserPoolClient, userPoolDomain: UserPoolDomain): FotoApiGatewayStack {
+export function fotoApiGatewayStackBuilder(app: App, stage: STAGE, hostedZone: IHostedZone, getSecretValueCommand: IFunction, putItemProfile: IFunction, getItemProfile: IFunction, putItemFotoLabel: IFunction, getItemFotoLabel: IFunction, deleteItemFotoLabel: IFunction, userPool: UserPool, userPoolClient: UserPoolClient, userPoolDomain: UserPoolDomain): FotoApiGatewayStack {
     return new FotoApiGatewayStack(app, `${prefix(stage)}-ApiGatewayStack`, {
         ...environment,
         hostedZone: hostedZone,
@@ -89,12 +89,15 @@ export function fotoApiGatewayStackBuilder(app: App, stage: STAGE, hostedZone: I
         userPool: userPool,
         userPoolClient: userPoolClient,
         userPoolDomain: userPoolDomain,
-        putItemDynamodb: putItemDynamodb,
-        getItemDynamodb: getItemDynamodb
+        putItemProfile: putItemProfile,
+        getItemProfile: getItemProfile,
+        putItemFotoLabel: putItemFotoLabel,
+        getItemFotoLabel: getItemFotoLabel,
+        deleteItemFotoLabel: deleteItemFotoLabel
     })
 }
 
-export function secretStackBuilder(app: App, stage: STAGE, userPool: UserPool, userPoolClient: UserPoolClient, userPoolDomain: UserPoolDomain, identity: CfnIdentityPool, bucket: Bucket, table: Table): SecretStack {
+export function secretStackBuilder(app: App, stage: STAGE, userPool: UserPool, userPoolClient: UserPoolClient, userPoolDomain: UserPoolDomain, identity: CfnIdentityPool, bucket: Bucket, profileTable: Table, fotoTable: Table): SecretStack {
     return new SecretStack(app, `${prefix(stage)}-SecretStack`, {
         ...environment,
         userPool: userPool,
@@ -102,7 +105,8 @@ export function secretStackBuilder(app: App, stage: STAGE, userPool: UserPool, u
         userPoolDomain: userPoolDomain,
         identityPool: identity,
         fileUploadBucket: bucket,
-        profileTable: table
+        profileTable: profileTable,
+        fotoTable: fotoTable
     })
 }
 

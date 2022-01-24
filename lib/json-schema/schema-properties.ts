@@ -1,4 +1,5 @@
 import { JsonSchemaType } from "aws-cdk-lib/aws-apigateway";
+import { Schema } from "inspector";
 
 export const configProps = {
     region: {
@@ -25,14 +26,6 @@ export const dynamodbPutItemProps = {
         type: JsonSchemaType.STRING,
         description: 'The dynamodb table name'
     },
-    key: {
-        type: JsonSchemaType.STRING,
-        description: 'The dynamodb key name'
-    },
-    value: {
-        type: JsonSchemaType.STRING,
-        description: 'The dynamodb key value'
-    },
 }
 
 export const dynamodbGetItemProps = {
@@ -51,6 +44,50 @@ export const dynamodbGetItemProps = {
 
 }
 
+
+export const putItemFotoProps = {
+   region: {
+        type: JsonSchemaType.STRING,
+        description: 'aws region'
+    },
+    tableName: {
+        type: JsonSchemaType.STRING,
+        description: 'foto table name'
+    }
+   
+}
+
+export const getItemFotoProps = {
+    region: {
+        type: JsonSchemaType.STRING,
+        description: 'aws region'
+    },
+    tableName: {
+        type: JsonSchemaType.STRING,
+        description: 'foto table name'
+    },
+    userSub: {
+        type: JsonSchemaType.STRING,
+        description: 'cognito user sub'
+    }
+   
+}
+
+export const deleteItemFotoProps = {
+    region: {
+        type: JsonSchemaType.STRING,
+        description: 'aws region'
+    },
+    tableName: {
+        type: JsonSchemaType.STRING,
+        description: 'foto table name'
+    },
+    id: {
+        type: JsonSchemaType.STRING,
+        description: 'image id in dynamodb'
+    }
+   
+}
 
 
 

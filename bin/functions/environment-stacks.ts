@@ -52,8 +52,11 @@ export function devStackBuilder(app: App, stage: STAGE): void {
         stage,
         route53Stack.hostedZone,
         fotoLambdaStack.getSecretValueCommand,
-        fotoLambdaStack.putItemDynamodb,
-        fotoLambdaStack.getItemDynamodb,
+        fotoLambdaStack.putItemProfile,
+        fotoLambdaStack.getItemProfile,
+        fotoLambdaStack.putItemFotoLabel,
+        fotoLambdaStack.getItemFotoLabel,
+        fotoLambdaStack.deleteItemFotoLabel,
         cognitoStack.userPool,
         cognitoStack.userPoolClient,
         cognitoStack.userPoolDomain
@@ -67,7 +70,8 @@ export function devStackBuilder(app: App, stage: STAGE): void {
         cognitoStack.userPoolDomain,
         cognitoStack.identityPool,
         s3FileUploadStack.fileUploadBucket,
-        dynamodbStack.profileTable
+        dynamodbStack.profileTable,
+        dynamodbStack.fotoTable
     );
 
 
@@ -111,8 +115,11 @@ export function steStackBuilder(app: App, stage: STAGE): void {
         stage,
         route53Stack.hostedZone,
         fotoLambdaStack.getSecretValueCommand,
-        fotoLambdaStack.putItemDynamodb,
-        fotoLambdaStack.getItemDynamodb,
+        fotoLambdaStack.putItemProfile,
+        fotoLambdaStack.getItemProfile,
+        fotoLambdaStack.putItemFotoLabel,
+        fotoLambdaStack.getItemFotoLabel,
+        fotoLambdaStack.deleteItemFotoLabel,
         cognitoStack.userPool,
         cognitoStack.userPoolClient,
         cognitoStack.userPoolDomain
@@ -126,7 +133,8 @@ export function steStackBuilder(app: App, stage: STAGE): void {
         cognitoStack.userPoolDomain,
         cognitoStack.identityPool,
         s3FileUploadStack.fileUploadBucket,
-        dynamodbStack.profileTable
+        dynamodbStack.profileTable,
+        dynamodbStack.fotoTable
     );
 
     const vpcStack = vpcStackBuilder(app, stage);

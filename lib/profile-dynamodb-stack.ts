@@ -4,18 +4,36 @@ import { Construct } from "constructs";
 
 export class ProfileDynamoDbStack extends Stack {
     public readonly profileTable: Table;
+    public readonly fotoTable: Table
 
     constructor(scope: Construct, id: string, props: StackProps) {
         super(scope, id, props);
 
-        this.profileTable = new Table(this, `${process.env.PROJECT_NAME}-profile-table`, {
+        this.profileTable = new Table(this, 'profile-table', {
             partitionKey: {
                 name: 'id',
                 type: AttributeType.STRING
             },
-            tableName: `${process.env.PROJECT_NAME}-profile-table`,
+            tableName: 'profile-table',
             removalPolicy: RemovalPolicy.DESTROY
             
+        })
+
+        this.fotoTable = new Table(this, 'foto-table', {
+            partitionKey: {
+                name: 'id',
+                type: AttributeType.STRING
+            },
+            tableName: 'foto-table',
+            removalPolicy: RemovalPolicy.DESTROY,
+        })
+
+        this.fotoTable.addGlobalSecondaryIndex({
+            indexName: 'userSub',
+            partitionKey: {
+                name: 'userSub',
+                type: AttributeType.STRING
+            }
         })
 
 

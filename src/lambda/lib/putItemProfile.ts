@@ -26,6 +26,8 @@ export async function main(event: EventDto): Promise<PutItemCommandOutput> {
         credentials: fromEnv()
     });
 
+    console.log(event)
+
     const command$ = of(new PutItemCommand({
         TableName: event.tableName,
         Item: {

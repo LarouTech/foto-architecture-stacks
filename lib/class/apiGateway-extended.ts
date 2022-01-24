@@ -81,7 +81,8 @@ export class StackApiGatewayExtended extends Stack {
                 schema: JsonSchemaVersion.DRAFT7,
                 title: name,
                 type: JsonSchemaType.OBJECT,
-                properties: properties
+                properties: properties,
+
             },
             contentType: 'application/json',
             modelName: name,

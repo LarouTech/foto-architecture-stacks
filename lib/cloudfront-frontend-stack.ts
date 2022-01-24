@@ -30,7 +30,7 @@ export class CloudfrontFrontendStack extends Stack {
             cors: [{
                 allowedOrigins: ['*'],
                 allowedMethods: [HttpMethods.GET],
-            }]
+            }],
         })
 
         //Cloudfront OAI access to S3
@@ -71,7 +71,7 @@ export class CloudfrontFrontendStack extends Stack {
                     s3OriginSource: {
                         s3BucketSource: this.staticWebsiteBucket,
                         originAccessIdentity: oai
-                    }
+                    },
                 }
 
             ],
@@ -90,6 +90,8 @@ export class CloudfrontFrontendStack extends Stack {
                 }
             ]
         })
+
+
 
         //Route53 ARecord alias for Cloudfront distribution
         const route53Domain = new ARecord(this, `${process.env.PROJECT_NAME}-DistributionRoute53ARecord`, {

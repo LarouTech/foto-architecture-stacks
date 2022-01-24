@@ -8,8 +8,14 @@ import { LambdaExtended } from './class/lambda-extended';
 export class FotoLambdaStack extends LambdaExtended {
     public readonly getSecretValueCommand: IFunction;
     public readonly createThumbnails: IFunction;
-    public readonly putItemDynamodb: IFunction;
-    public readonly getItemDynamodb: IFunction;
+    public readonly putItemProfile: IFunction;
+    public readonly getItemProfile: IFunction;
+    public readonly putItemFotoLabel: IFunction;
+    public readonly getItemFotoLabel: IFunction;
+    public readonly deleteItemFotoLabel: IFunction;
+
+
+    
 
     constructor(scope: Construct, id: string, props: StackProps) {
         super(scope, id, props);
@@ -53,7 +59,9 @@ export class FotoLambdaStack extends LambdaExtended {
                         "dynamodb:PutItem"
                     ],
                     resources: [
-                        `arn:aws:dynamodb:${process.env.AWS_REGION}:${process.env.AWS_ACCOUNT}:table/${process.env.PROJECT_NAME}-profile-table`
+                        `arn:aws:dynamodb:${process.env.AWS_REGION}:${process.env.AWS_ACCOUNT}:table/profile-table`,
+                        `arn:aws:dynamodb:${process.env.AWS_REGION}:${process.env.AWS_ACCOUNT}:table/foto-table`,
+                        `arn:aws:dynamodb:${process.env.AWS_REGION}:${process.env.AWS_ACCOUNT}:table/foto-table/index/userSub`,
                     ]
                 })
             ]
@@ -111,7 +119,6 @@ export class FotoLambdaStack extends LambdaExtended {
         );
 
         const thumbnailsManagedPolicy = ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
-
         const dynamodbManagedPolicy = ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
 
         // attach the Managed Policy to the Role
@@ -144,13 +151,13 @@ export class FotoLambdaStack extends LambdaExtended {
             'sharpLayer',
             'src/layers/sharp'
         );
+
         const rekognitionLayer = this.createLambdaLayer('rekognitionLayer', 'src/layers/rekognition-client')
-
         const awsSdkV2Layer = this.createLambdaLayer('awsSdkV2Layer', 'src/layers/aws-sdk-v2')
-
         const lambdaClientLayer = this.createLambdaLayer('lambdaClientLayer', 'src/layers/lambda-client')
-
         const dynamoDbLayer = this.createLambdaLayer('dynamoDbLayer', 'src/layers/dynamodb')
+        const libDynamodbLayer = this.createLambdaLayer('libDynamodbLayer', 'src/layers/lib-dynamodb')
+
 
 
         //Define lambdas
@@ -161,21 +168,42 @@ export class FotoLambdaStack extends LambdaExtended {
             secretManagerRole
         );
 
-        this.putItemDynamodb = this.createLambdaFunction(
-            'putItemDynamodb',
-            `${lambdaPath}/putItemDynamodb.ts`,
+        this.putItemProfile = this.createLambdaFunction(
+            'putItemProfile',
+            `${lambdaPath}/putItemProfile.ts`,
             [credentialProviderLayer, dynamoDbLayer, rxjsLayer],
             dynamodbRole
         );
 
-        this.getItemDynamodb = this.createLambdaFunction(
-            'getItemDynamodb',
-            `${lambdaPath}/getItemDynamodb.ts`,
+        this.getItemProfile = this.createLambdaFunction(
+            'getItemProfile',
+            `${lambdaPath}/getItemProfile.ts`,
             [credentialProviderLayer, dynamoDbLayer, rxjsLayer],
             dynamodbRole
         );
 
+        this.putItemFotoLabel = this.createLambdaFunction(
+            'putItemFotoLabel',
+            `${lambdaPath}/putItemFotoLabel.ts`,
+            [credentialProviderLayer, dynamoDbLayer, rxjsLayer, libDynamodbLayer],
+            dynamodbRole
+        );
 
+        this.getItemFotoLabel = this.createLambdaFunction(
+            'getItemFotoLabel',
+            `${lambdaPath}/getItemFotoLabel.ts`,
+            [credentialProviderLayer, dynamoDbLayer, rxjsLayer, libDynamodbLayer],
+            dynamodbRole
+        );
+
+        this.deleteItemFotoLabel = this.createLambdaFunction(
+            'deleteItemFotoLabel',
+            `${lambdaPath}/deleteItemFotoLabel.ts`,
+            [credentialProviderLayer, dynamoDbLayer, rxjsLayer, libDynamodbLayer],
+            dynamodbRole
+        );
+
+        
 
         this.createThumbnails = new Function(this, `${process.env.PROJECT_NAME}-createThumbnails`, {
             code: Code.fromAsset(`${lambdaPath}/createThumbnails`),
@@ -185,11 +213,7 @@ export class FotoLambdaStack extends LambdaExtended {
             layers: [sharpLayer, awsSdkV2Layer, lambdaClientLayer],
             role: thumbnailsRole,
             timeout: Duration.seconds(30)
-
-
-
         })
-
 
     }
 }

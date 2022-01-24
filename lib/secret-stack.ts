@@ -12,7 +12,7 @@ export class SecretStack extends Stack {
     constructor(scope: Construct, id: string, props?: CustomProps) {
         super(scope, id, props);
 
-        const { userPool, userPoolClient, identityPool, fileUploadBucket, profileTable } = props!;
+        const { userPool, userPoolClient, identityPool, fileUploadBucket, profileTable, fotoTable } = props!;
 
         const cognitoSecret = new Secret(this, `${process.env.PROJECT_NAME}-${process.env.STAGE_ENV}-secret`, {
             secretName: `${process.env.PROJECT_NAME}-${process.env.STAGE_ENV}-secret`,
@@ -29,7 +29,8 @@ export class SecretStack extends Stack {
                     rootDomain: process.env.DOMAIN_NAME,
                     identityPoolId: identityPool!.ref,
                     uploadBucket: fileUploadBucket.bucketName,
-                    profileTableName: profileTable.tableName
+                    profileTableName: profileTable.tableName,
+                    fotoTableName: fotoTable.tableName
 
                 }),
                 generateStringKey: 'config',
